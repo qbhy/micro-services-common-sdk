@@ -12,17 +12,30 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use Qbhy\SimpleJwt\Interfaces\Encoder;
+use Qbhy\SimpleJwt\JWTManager;
 
 class Client
 {
+    const AUTH_HEADER = 'app-authorized-token';
+
+    /** @var Config */
     protected $config;
+
+    /** @var ClientEncrypt */
+    protected $encrypt;
+
+    /** @var JWTManager */
+    protected $jwtManager;
 
     /** @var HttpClient */
     protected $http;
 
-    public function __construct(Config $config)
+    public function __construct(Config $config, Encoder $encoder)
     {
-        $this->config = $config;
+        $this->config     = $config;
+        $this->encrypt    = new ClientEncrypt($this->config);
+        $this->jwtManager = new JWTManager($this->encrypt, $encoder);
     }
 
     /**
@@ -52,6 +65,9 @@ class Client
         try {
             $response = $this->getHttp()->request($method, $uri, [
                 Client::paramsType($method, $paramsType) => $params,
+                RequestOptions::HEADERS                  => [
+                    Client::AUTH_HEADER => $this->token(),
+                ]
             ]);
         } catch (BadResponseException $exception) {
             throw $exception;
@@ -79,5 +95,10 @@ class Client
     public function formatResponse(Response $response)
     {
         return @\GuzzleHttp\json_decode($response->getBody()->__toString(), true);
+    }
+
+    public function token()
+    {
+        return $this->jwtManager->make(['aid' => $this->config->get('app.id'),])->token();
     }
 }
