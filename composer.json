@@ -1,0 +1,22 @@
+{
+    "name": "root/micro-services-common-sdk",
+    "authors": [
+        {
+            "name": "96qbhy",
+            "email": "96qbhy@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "96qbhy/simple-jwt": "^0.0.4",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "laravel/lumen-framework": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qbhy\\MicroServicesCommonSdk\\": "src"
+        }
+    }
+}
