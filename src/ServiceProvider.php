@@ -9,14 +9,12 @@ namespace Qbhy\MicroServicesCommonSdk;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Illuminate\Container\Container;
 use Laravel\Lumen\Application;
 use Qbhy\MicroServicesCommonSdk\JwtParser\AuthHeaders;
 use Qbhy\MicroServicesCommonSdk\JwtParser\InputSource;
 use Qbhy\MicroServicesCommonSdk\JwtParser\LumenRouteParams;
 use Qbhy\MicroServicesCommonSdk\JwtParser\Parser;
 use Qbhy\MicroServicesCommonSdk\JwtParser\QueryString;
-use Qbhy\MicroServicesCommonSdk\Services\Auth\AuthService;
 use Qbhy\MicroServicesCommonSdk\Services\Auth\ExampleService;
 use Qbhy\SimpleJwt\Encoders\Base64UrlSafeEncoder;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
@@ -114,7 +112,6 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         $services = [
-            AuthService::class,
             ExampleService::class,
         ];
 
