@@ -23,11 +23,11 @@ class ClientEncrypt extends PasswordHashEncrypter
 
     public function signature(string $signatureString): string
     {
-        return password_hash($signatureString . $this->config->get('app.secret'), PASSWORD_BCRYPT);
+        return password_hash($signatureString . $this->config->get('app')['secret'], PASSWORD_BCRYPT);
     }
 
     public function check(string $signatureString, string $signature): bool
     {
-        return password_verify($signatureString . $this->config->get('app.secret'), $signature);
+        return password_verify($signatureString . $this->config->get('app')['secret'], $signature);
     }
 }

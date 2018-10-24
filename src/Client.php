@@ -99,6 +99,6 @@ class Client
 
     public function token()
     {
-        return $this->jwtManager->make(['aid' => $this->config->get('app.id'),])->token();
+        return $this->jwtManager->make(['aid' => $this->config->get('app')['id'],])->token();
     }
 }
