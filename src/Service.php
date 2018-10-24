@@ -38,4 +38,12 @@ abstract class Service
      */
     abstract public function prefix(): string;
 
+    /**
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
 }
