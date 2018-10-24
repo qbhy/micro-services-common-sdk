@@ -5,7 +5,7 @@
  * Time: 下午6:17
  */
 
-namespace Qbhy\MicroServicesCommonSdk\Services\Auth;
+namespace Qbhy\MicroServicesCommonSdk\Services;
 
 class ExampleService extends \Qbhy\MicroServicesCommonSdk\Service
 {

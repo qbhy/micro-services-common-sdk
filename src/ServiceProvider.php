@@ -15,7 +15,8 @@ use Qbhy\MicroServicesCommonSdk\JwtParser\InputSource;
 use Qbhy\MicroServicesCommonSdk\JwtParser\LumenRouteParams;
 use Qbhy\MicroServicesCommonSdk\JwtParser\Parser;
 use Qbhy\MicroServicesCommonSdk\JwtParser\QueryString;
-use Qbhy\MicroServicesCommonSdk\Services\Auth\ExampleService;
+use Qbhy\MicroServicesCommonSdk\Services\ExampleService;
+use Qbhy\MicroServicesCommonSdk\Services\UserService;
 use Qbhy\SimpleJwt\Encoders\Base64UrlSafeEncoder;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
 use Qbhy\SimpleJwt\JWTManager;
@@ -112,6 +113,7 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         $services = [
+            UserService::class,
             ExampleService::class,
         ];
 

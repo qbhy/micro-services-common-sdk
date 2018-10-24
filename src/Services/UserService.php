@@ -5,7 +5,7 @@
  * Time: 下午6:17
  */
 
-namespace Qbhy\MicroServicesCommonSdk\Services\Auth;
+namespace Qbhy\MicroServicesCommonSdk\Services;
 
 class UserService extends \Qbhy\MicroServicesCommonSdk\Service
 {
