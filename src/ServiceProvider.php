@@ -16,7 +16,9 @@ use Qbhy\MicroServicesCommonSdk\JwtParser\LumenRouteParams;
 use Qbhy\MicroServicesCommonSdk\JwtParser\Parser;
 use Qbhy\MicroServicesCommonSdk\JwtParser\QueryString;
 use Qbhy\MicroServicesCommonSdk\Services\ExampleService;
-use Qbhy\MicroServicesCommonSdk\Services\UserService;
+use Qbhy\MicroServicesCommonSdk\Services\UserService\Auth\UserServiceGuard;
+use Qbhy\MicroServicesCommonSdk\Services\UserService\Auth\UserServiceUserProvider;
+use Qbhy\MicroServicesCommonSdk\Services\UserService\UserService;
 use Qbhy\SimpleJwt\Encoders\Base64UrlSafeEncoder;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
 use Qbhy\SimpleJwt\JWTManager;
@@ -122,6 +124,18 @@ class ServiceProvider extends BaseServiceProvider
                 return new $service($this->app->make(Client::class));
             });
         }
+
+        $this->app->make('auth')->provider('user_service', function ($app, $config) {
+            return new UserServiceUserProvider($config['model']);
+        });
+
+        $this->app->make('auth')->extend('user_service', function ($app, $name, $config) {
+            return new  UserServiceGuard(
+                $this->app->make(JWTManager::class),
+                $this->app->make('auth')->createUserProvider($config['provider']),
+                $this->app->make(Request::class)
+            );
+        });
     }
 
 }
