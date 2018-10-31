@@ -16,9 +16,11 @@ use Qbhy\MicroServicesCommonSdk\JwtParser\LumenRouteParams;
 use Qbhy\MicroServicesCommonSdk\JwtParser\Parser;
 use Qbhy\MicroServicesCommonSdk\JwtParser\QueryString;
 use Qbhy\MicroServicesCommonSdk\Services\ExampleService;
+use Qbhy\MicroServicesCommonSdk\Services\PaymentService\PaymentService;
 use Qbhy\MicroServicesCommonSdk\Services\UserService\Auth\UserServiceGuard;
 use Qbhy\MicroServicesCommonSdk\Services\UserService\Auth\UserServiceUserProvider;
 use Qbhy\MicroServicesCommonSdk\Services\UserService\UserService;
+use Qbhy\MicroServicesCommonSdk\Services\WechatService\WechatService;
 use Qbhy\SimpleJwt\Encoders\Base64UrlSafeEncoder;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
 use Qbhy\SimpleJwt\JWTManager;
@@ -116,6 +118,8 @@ class ServiceProvider extends BaseServiceProvider
 
         $services = [
             UserService::class,
+            PaymentService::class,
+            WechatService::class,
             ExampleService::class,
         ];
 
