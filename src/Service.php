@@ -28,7 +28,7 @@ abstract class Service
      */
     public function request(string $method, string $uri, array $params = [], $paramsType = null)
     {
-        return $this->client->request($method, $this->prefix().'/' . $uri, $params, $paramsType);
+        return $this->client->request($method, $this->prefix() . '/' . $uri, $params, $paramsType);
     }
 
     /**

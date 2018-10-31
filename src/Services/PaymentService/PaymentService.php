@@ -36,4 +36,39 @@ class PaymentService extends Service
         ]);
     }
 
+    /**
+     * @param UserServiceSubject $user
+     * @param TransferableOrder  $transfer
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function transferToUser(UserServiceSubject $user, TransferableOrder $transfer)
+    {
+        return $this->request('post', 'transfer', [
+            'client_ip'       => $transfer->getClientIp(),
+            'app_transfer_id' => $transfer->getAppTransferId(),
+            'amount'          => $transfer->getAmount(),
+            'check_name'      => $transfer->getCheckName(),
+            'real_name'       => $transfer->getRealName(),
+            'transfer_reason' => $transfer->getTransferReason(),
+            'oid'             => $user->getOid(),
+        ]);
+    }
+
+    /**
+     * @param RefundableOrder $order
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function refund(RefundableOrder $order)
+    {
+        return $this->request('post', 'refund', [
+            'app_refund_id' => $order->getAppRefundId(),
+            'refund_amount' => $order->getRefundAmount(),
+            'refund_reason' => $order->getRefundReason(),
+            'payment_id'    => $order->getPaymentId(),
+        ]);
+    }
 }
