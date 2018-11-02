@@ -13,7 +13,7 @@ namespace Qbhy\MicroServicesCommonSdk\JwtParser;
 
 use Illuminate\Http\Request;
 
-class QueryString implements \Qbhy\MicroServicesCommonSdk\Auth\Parser
+class QueryString implements \Qbhy\MicroServicesCommonSdk\Parser
 {
     use KeyTrait;
 
