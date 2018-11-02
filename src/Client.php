@@ -12,6 +12,7 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use Qbhy\MicroServicesCommonSdk\Exceptions\UndefinedAppException;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
 use Qbhy\SimpleJwt\JWTManager;
 
@@ -59,6 +60,7 @@ class Client
      *
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws UndefinedAppException
      */
     public function request(string $method, string $uri, array $params = [], $paramsType = null)
     {
@@ -97,8 +99,12 @@ class Client
         return @\GuzzleHttp\json_decode($response->getBody()->__toString(), true);
     }
 
+    /**
+     * @return string
+     * @throws Exceptions\UndefinedAppException
+     */
     public function token()
     {
-        return $this->jwtManager->make(['aid' => $this->config->get('app')['id'],])->token();
+        return $this->jwtManager->make(['aid' => $this->config->getAppConfig()['id']])->token();
     }
 }
