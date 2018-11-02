@@ -6,10 +6,14 @@
  */
 
 return [
-    'base_uri' => env('MICRO_SERVICE_BASE_URI'),
-    'app'      => [
-        'id'     => env('MICRO_SERVICE_APP_ID'),
-        'secret' => env('MICRO_SERVICE_APP_SECRET'),
-        'token'  => env('MICRO_SERVICE_APP_TOKEN'),
+    'use'        => 'default',
+    'app_header' => 'App',
+    'base_uri'   => env('MICRO_SERVICE_BASE_URI'),
+    'apps'       => [
+        'default' => [
+            'id'     => env('MICRO_SERVICE_APP_ID'),
+            'secret' => env('MICRO_SERVICE_APP_SECRET'),
+            'token'  => env('MICRO_SERVICE_APP_TOKEN'),
+        ]
     ],
 ];

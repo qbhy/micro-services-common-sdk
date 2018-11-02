@@ -39,11 +39,18 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected $config;
 
+    /**
+     * @return Config
+     * @throws Exceptions\UndefinedAppException
+     */
     protected function getConfig()
     {
         if (null === $this->config) {
-            $config       = config('micro-services');
-            $this->config = new Config($config);
+            $config = new Config(config('micro-services'));
+
+            $use = $this->app->make(Request::class)->header($config->get('app_header', 'App'), $config->get('use', 'default'));
+
+            $this->config = $config->use($use);
         }
 
         return $this->config;

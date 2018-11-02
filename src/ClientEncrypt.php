@@ -21,13 +21,12 @@ class ClientEncrypt extends PasswordHashEncrypter
         $this->config = $config;
     }
 
-    public function signature(string $signatureString): string
+    /**
+     * @return string
+     * @throws Exceptions\UndefinedAppException
+     */
+    public function getSecret(): string
     {
-        return password_hash($signatureString . $this->config->get('app')['secret'], PASSWORD_BCRYPT);
-    }
-
-    public function check(string $signatureString, string $signature): bool
-    {
-        return password_verify($signatureString . $this->config->get('app')['secret'], $signature);
+        return $this->config->getAppConfig()['secret'];
     }
 }
