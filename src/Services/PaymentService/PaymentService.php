@@ -26,7 +26,7 @@ class PaymentService extends Service
      */
     public function pay(UserServiceSubject $user, PayableOrder $order)
     {
-        return $this->request('post', '', [
+        $paymentInfo = $this->request('post', '', [
             'client_ip'      => $order->getClientIp(),
             'payable_amount' => $order->getPayableAmount(),
             'subject'        => $order->getSubject(),
@@ -34,6 +34,10 @@ class PaymentService extends Service
             'app_trade_id'   => $order->getAppTradeId(),
             'oid'            => $user->getOid(),
         ]);
+
+        $order->savePaymentInfo($paymentInfo);
+
+        return $paymentInfo['pay_config'];
     }
 
     /**

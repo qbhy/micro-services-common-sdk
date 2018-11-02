@@ -20,4 +20,10 @@ interface PayableOrder
 
     public function getAppTradeId();
 
+    public function savePaymentInfo(array $paymentInfo);
+
+    public function setPaymentId(int $paymentId);
+
+    public function setServiceTradeId(string $serviceTradeId);
+
 }
