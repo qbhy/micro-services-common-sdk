@@ -7,23 +7,34 @@
 
 namespace Qbhy\MicroServicesCommonSdk\Notify;
 
-use Illuminate\Http\Request;
+use Qbhy\MicroServicesCommonSdk\Config;
 use Qbhy\MicroServicesCommonSdk\Notify\Handlers\Handler;
-use Qbhy\MicroServicesCommonSdk\Notify\Handlers\PaymentNotify;
 
 class Notify
 {
-    const NOTIFY_HANDLERS = [
-        'payment' => PaymentNotify::class,
-    ];
-
+    /**
+     * @param $result
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Qbhy\MicroServicesCommonSdk\Exceptions\UndefinedAppException
+     * @throws UndefinedHandlerException
+     */
     public static function handle($result)
     {
-        $handlerClass = Notify::NOTIFY_HANDLERS[$result['type']];
+        /** @var Config $config */
+        $config = app(Config::class);
 
-        /** @var Handler $handler */
-        $handler = new $handlerClass($result['status'], $result['data']);
+        $handlers = $config->getAppConfig()['handlers'];
 
-        return $handler->handle();
+        if (isset($handlers[$result['type']])) {
+            $handlerClass = $handlers[$result['type']];
+
+            /** @var Handler $handler */
+            $handler = new $handlerClass($result['status'], $result['data']);
+
+            return $handler->handle();
+        }
+
+        throw new UndefinedHandlerException('未定义 ' . $result['type'] . ' 处理程序!');
     }
 }

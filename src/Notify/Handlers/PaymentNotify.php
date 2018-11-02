@@ -11,6 +11,6 @@ class PaymentNotify extends AbstractHandler
 {
     public function handle()
     {
-
+        
     }
 }

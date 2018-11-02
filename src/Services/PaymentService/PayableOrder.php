@@ -26,4 +26,8 @@ interface PayableOrder
 
     public function setServiceTradeId(string $serviceTradeId);
 
+    public static function findFromPaymentInfo(array $paymentInfo);
+
+    public function paidResultHandler(array $paymentInfo, $status);
+
 }

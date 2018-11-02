@@ -32,7 +32,7 @@ class NotifyMiddleware
                 $jwtManager = app(JWTManager::class);
                 $jwt        = $jwtManager->fromToken($token);
 
-                if ($jwt->getPayload()['aid'] === config('micro-services.app.id')) {
+                if ($jwt->getPayload()['aid'] === config('micro-services.app.id') || $jwt->getHeaders()['t'] === 'notify') {
                     return $next($request);
                 }
             } catch (JWTException $exception) {

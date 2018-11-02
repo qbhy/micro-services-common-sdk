@@ -7,7 +7,12 @@
 
 namespace Qbhy\MicroServicesCommonSdk\Notify\Handlers;
 
+use Symfony\Component\HttpFoundation\Response;
+
 interface Handler
 {
+    /**
+     * @return Response
+     */
     public function handle();
 }

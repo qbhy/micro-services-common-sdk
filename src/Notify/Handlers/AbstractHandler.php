@@ -21,4 +21,20 @@ abstract class AbstractHandler implements Handler
         $this->data   = $data;
         $this->status = $status;
     }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
 }
