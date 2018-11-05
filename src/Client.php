@@ -92,11 +92,15 @@ class Client
     /**
      * @param Response $response
      *
-     * @return mixed
+     * @return array|string
      */
     public function formatResponse(Response $response)
     {
-        return @\GuzzleHttp\json_decode($response->getBody()->__toString(), true);
+        if ($result = @json_decode($raw = $response->getBody()->__toString(), true)) {
+            return $result;
+        }
+
+        return $raw;
     }
 
     /**
