@@ -34,4 +34,11 @@ class WechatService extends Service
         ]);
     }
 
+    public function contentTextVerify($content)
+    {
+        return $this->request('post', 'mini-app-check-text', [
+            'content' => $content
+        ]);
+    }
+
 }
