@@ -111,4 +111,12 @@ class Client
     {
         return $this->jwtManager->make(['aid' => $this->config->getAppConfig()['id']])->token();
     }
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
 }

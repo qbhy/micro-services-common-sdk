@@ -7,6 +7,9 @@
 
 namespace Qbhy\MicroServicesCommonSdk;
 
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\RequestOptions;
+
 abstract class Service
 {
     /** @var Client */
@@ -20,8 +23,8 @@ abstract class Service
     /**
      * @param string $method
      * @param string $uri
-     * @param array  $params
-     * @param null   $paramsType
+     * @param array $params
+     * @param null $paramsType
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
@@ -44,6 +47,34 @@ abstract class Service
     public function getClient(): Client
     {
         return $this->client;
+    }
+
+    /**
+     * @param $method
+     * @param $url
+     * @param $params
+     * @param null $paramsType
+     * @return array|string
+     * @throws Exceptions\UndefinedAppException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function frontendRequest($method, $url, $params, $paramsType = null)
+    {
+        $host   = str_contains($url, '://') ? '' : env('MICRO_SERVICE_BASE_URI');
+        $client = $this->getClient();
+        try {
+            $response = $client->getHttp()->request($method, $host . $url, [
+                Client::paramsType($method, $paramsType) => $params,
+                RequestOptions::HEADERS                  => [
+                    'aid' => $client->getConfig()->getAppConfig()['id'],
+                ]
+            ]);
+        } catch (BadResponseException $exception) {
+            throw $exception;
+//            $response = $exception->getResponse();
+        }
+
+        return $client->formatResponse($response);
     }
 
 }

@@ -34,11 +34,27 @@ class WechatService extends Service
         ]);
     }
 
+    /**
+     * @param $content
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function contentTextVerify($content)
     {
         return $this->request('post', 'mini-app-check-text', [
-            'content' => $content
+            'content' => $content,
         ]);
+    }
+
+    /**
+     * @param $page
+     * @return array|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Qbhy\MicroServicesCommonSdk\Exceptions\UndefinedAppException
+     */
+    public function smallProgramCode($page)
+    {
+        return $this->frontendRequest('get', 'wx-app/code', compact('page'));
     }
 
 }
