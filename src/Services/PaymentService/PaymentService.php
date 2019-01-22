@@ -56,6 +56,7 @@ class PaymentService extends Service
             'check_name'      => $transfer->getCheckName(),
             'real_name'       => $transfer->getRealName(),
             'transfer_reason' => $transfer->getTransferReason(),
+            'payee_account'   => $transfer->getPayeeAccount(),
             'oid'             => $user->getOid(),
         ]);
     }

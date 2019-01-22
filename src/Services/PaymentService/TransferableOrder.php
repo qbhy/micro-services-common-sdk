@@ -22,4 +22,6 @@ interface TransferableOrder
 
     public function getAppTransferId();
 
+    public function getPayeeAccount();
+
 }
