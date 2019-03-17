@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": "^7.1.3",
-        "96qbhy/simple-jwt": "dev-master",
+        "96qbhy/simple-jwt": "*",
         "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
