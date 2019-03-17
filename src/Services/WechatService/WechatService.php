@@ -36,6 +36,7 @@ class WechatService extends Service
 
     /**
      * @param $content
+     *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -48,6 +49,7 @@ class WechatService extends Service
 
     /**
      * @param $page
+     *
      * @return array|string
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Qbhy\MicroServicesCommonSdk\Exceptions\UndefinedAppException
@@ -55,6 +57,19 @@ class WechatService extends Service
     public function smallProgramCode($page)
     {
         return $this->frontendRequest('get', 'wx-app/code', compact('page'));
+    }
+
+    /**
+     * @param $code
+     * @param $encryptedData
+     * @param $iv
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function decryptData($code, $encryptedData, $iv)
+    {
+        return $this->request('POST', 'mini-app-decrypt-data', compact('code', 'encryptedData', 'iv'));
     }
 
 }
