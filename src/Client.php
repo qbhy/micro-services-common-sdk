@@ -44,7 +44,7 @@ class Client
      */
     public function getHttp()
     {
-        if (is_null($this->http)) {
+        if ($this->http === null) {
             $this->http = new HttpClient([
                 'base_uri' => $this->config->get('base_uri'),
             ]);

@@ -15,6 +15,8 @@ abstract class Service
     /** @var Client */
     protected $client;
 
+    protected $prefix;
+
     public function __construct(Client $client)
     {
         $this->client = $client;
@@ -23,15 +25,15 @@ abstract class Service
     /**
      * @param string $method
      * @param string $uri
-     * @param array $params
-     * @param null $paramsType
+     * @param array  $params
+     * @param null   $paramsType
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request(string $method, string $uri, array $params = [], $paramsType = null)
     {
-        return $this->client->request($method, $this->prefix() . '/' . $uri, $params, $paramsType);
+        return $this->client->request($method, 'internal/' . $this->prefix() . '/' . $uri, $params, $paramsType);
     }
 
     /**
@@ -50,9 +52,9 @@ abstract class Service
     }
 
     /**
-     * @param $method
-     * @param $url
-     * @param $params
+     * @param      $method
+     * @param      $url
+     * @param      $params
      * @param null $paramsType
      * @return array|string
      * @throws Exceptions\UndefinedAppException

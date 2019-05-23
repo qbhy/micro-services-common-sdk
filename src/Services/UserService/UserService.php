@@ -7,7 +7,9 @@
 
 namespace Qbhy\MicroServicesCommonSdk\Services\UserService;
 
-class UserService extends \Qbhy\MicroServicesCommonSdk\Service
+use Qbhy\MicroServicesCommonSdk\Service;
+
+class UserService extends Service
 {
     public function prefix(): string
     {
@@ -20,7 +22,7 @@ class UserService extends \Qbhy\MicroServicesCommonSdk\Service
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
      */
-    public function userinfo(int $oid, int $uid = 0)
+    public function userinfo(int $oid, int $uid = null)
     {
         return $this->request('get', $oid, compact('uid'));
     }
