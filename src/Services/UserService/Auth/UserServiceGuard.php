@@ -47,13 +47,13 @@ class UserServiceGuard implements Guard
     /**
      * Instantiate the class.
      *
-     * @param  JWTManager                              $jwt
-     * @param  \Illuminate\Contracts\Auth\UserProvider $provider
-     * @param  \Illuminate\Http\Request                $request
+     * @param JWTManager               $jwt
+     * @param UserServiceUserProvider  $provider
+     * @param \Illuminate\Http\Request $request
      *
      * @return void
      */
-    public function __construct(JWTManager $jwt, UserProvider $provider, Request $request)
+    public function __construct(JWTManager $jwt, UserServiceUserProvider $provider, Request $request)
     {
         $this->jwt      = $jwt;
         $this->provider = $provider;
@@ -66,13 +66,13 @@ class UserServiceGuard implements Guard
      * @throws \Qbhy\SimpleJwt\Exceptions\SignatureException
      * @throws \Qbhy\SimpleJwt\Exceptions\TokenExpiredException
      */
-    public function user()
+    public function user($token = null)
     {
-        if ($this->user !== null) {
+        if ($token === null && $this->user !== null) {
             return $this->user;
         }
 
-        $token = app(Parser::class)->setRequest($this->request)->parseToken();
+        $token = $token ?? app(Parser::class)->setRequest($this->request)->parseToken();
 
         if ($token && ($payload = $this->jwt->fromToken($token)->getPayload())) {
             return $this->user = $this->provider->retrieveById($payload);
@@ -82,7 +82,7 @@ class UserServiceGuard implements Guard
     /**
      * Validate a user's credentials.
      *
-     * @param  array $credentials
+     * @param array $credentials
      *
      * @return bool
      */
@@ -94,8 +94,8 @@ class UserServiceGuard implements Guard
     /**
      * Attempt to authenticate the user using the given credentials and return the token.
      *
-     * @param  array $credentials
-     * @param  bool  $login
+     * @param array $credentials
+     * @param bool  $login
      *
      * @return bool|string
      */
@@ -114,7 +114,7 @@ class UserServiceGuard implements Guard
     /**
      * Create a token for a user.
      *
-     * @param  UserServiceSubject $user
+     * @param UserServiceSubject $user
      *
      * @return string
      */
@@ -127,7 +127,7 @@ class UserServiceGuard implements Guard
     /**
      * Logout the user, thus invalidating the token.
      *
-     * @param  bool $forceForever
+     * @param bool $forceForever
      *
      * @return void
      */
@@ -139,8 +139,8 @@ class UserServiceGuard implements Guard
     /**
      * Refresh the token.
      *
-     * @param  bool $forceForever
-     * @param  bool $resetClaims
+     * @param bool $forceForever
+     * @param bool $resetClaims
      *
      * @return string
      */
@@ -152,7 +152,7 @@ class UserServiceGuard implements Guard
     /**
      * Get the user provider used by the guard.
      *
-     * @return \Illuminate\Contracts\Auth\UserProvider
+     * @return UserServiceUserProvider
      */
     public function getProvider()
     {
@@ -162,7 +162,7 @@ class UserServiceGuard implements Guard
     /**
      * Set the user provider used by the guard.
      *
-     * @param  \Illuminate\Contracts\Auth\UserProvider $provider
+     * @param \Illuminate\Contracts\Auth\UserProvider $provider
      *
      * @return $this
      */
@@ -196,7 +196,7 @@ class UserServiceGuard implements Guard
     /**
      * Set the current request instance.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return $this
      */
@@ -220,8 +220,8 @@ class UserServiceGuard implements Guard
     /**
      * Determine if the user matches the credentials.
      *
-     * @param  mixed $user
-     * @param  array $credentials
+     * @param mixed $user
+     * @param array $credentials
      *
      * @return bool
      */
