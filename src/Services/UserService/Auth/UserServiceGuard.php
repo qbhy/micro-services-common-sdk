@@ -17,6 +17,7 @@ use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Qbhy\MicroServicesCommonSdk\JwtParser\Parser;
+use Qbhy\SimpleJwt\Exceptions\JWTException;
 use Qbhy\SimpleJwt\JWTManager;
 
 class UserServiceGuard implements Guard
@@ -71,11 +72,14 @@ class UserServiceGuard implements Guard
         if ($token === null && $this->user !== null) {
             return $this->user;
         }
+        try {
+            $token = $token ?? app(Parser::class)->setRequest($this->request)->parseToken();
 
-        $token = $token ?? app(Parser::class)->setRequest($this->request)->parseToken();
-
-        if ($token && ($payload = $this->jwt->fromToken($token)->getPayload())) {
-            return $this->user = $this->provider->retrieveById($payload);
+            if ($token && ($payload = $this->jwt->fromToken($token)->getPayload())) {
+                return $this->user = $this->provider->retrieveById($payload);
+            }
+        } catch (JWTException $exception) {
+            return $this->user = null;
         }
     }
 
