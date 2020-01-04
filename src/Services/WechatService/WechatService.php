@@ -20,8 +20,8 @@ class WechatService extends Service
     /**
      * @param array $data
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function sendTemplateMsg(UserServiceSubject $user, $templateId, $formId, $page, array $data)
     {
@@ -29,6 +29,22 @@ class WechatService extends Service
             'oid'         => $user->getOid(),
             'template_id' => $templateId,
             'form_id'     => $formId,
+            'page'        => $page,
+            'data'        => $data,
+        ]);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendSubscribeMsg(UserServiceSubject $user, $templateId, $page, array $data)
+    {
+        return $this->request('post', 'mini-app-subscribe-msg', [
+            'oid'         => $user->getOid(),
+            'template_id' => $templateId,
             'page'        => $page,
             'data'        => $data,
         ]);
