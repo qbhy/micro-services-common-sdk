@@ -18,22 +18,23 @@ class PaymentService extends Service
     }
 
     /**
-     * @param PayableOrder       $order
+     * @param PayableOrder $order
      * @param UserServiceSubject $user
+     * @param array $optional
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function pay(UserServiceSubject $user, PayableOrder $order)
+    public function pay(UserServiceSubject $user, PayableOrder $order, array $optional = [])
     {
-        $paymentInfo = $this->request('post', '', [
-            'client_ip'      => $order->getClientIp(),
+        $paymentInfo = $this->request('post', '', array_merge([
+            'client_ip' => $order->getClientIp(),
             'payable_amount' => $order->getPayableAmount(),
-            'subject'        => $order->getSubject(),
-            'body'           => $order->getBody(),
-            'app_trade_id'   => $order->getAppTradeId(),
-            'oid'            => $user->getOid(),
-        ]);
+            'subject' => $order->getSubject(),
+            'body' => $order->getBody(),
+            'app_trade_id' => $order->getAppTradeId(),
+            'oid' => $user->getOid(),
+        ], $optional));
 
         $order->savePaymentInfo($paymentInfo);
 
@@ -42,38 +43,40 @@ class PaymentService extends Service
 
     /**
      * @param UserServiceSubject $user
-     * @param TransferableOrder  $transfer
+     * @param TransferableOrder $transfer
+     * @param array $optional
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function transferToUser(UserServiceSubject $user, TransferableOrder $transfer)
+    public function transferToUser(UserServiceSubject $user, TransferableOrder $transfer, array $optional = [])
     {
-        return $this->request('post', 'transfer', [
-            'client_ip'       => $transfer->getClientIp(),
+        return $this->request('post', 'transfer', array_merge([
+            'client_ip' => $transfer->getClientIp(),
             'app_transfer_id' => $transfer->getAppTransferId(),
-            'amount'          => $transfer->getAmount(),
-            'check_name'      => $transfer->getCheckName(),
-            'real_name'       => $transfer->getRealName(),
+            'amount' => $transfer->getAmount(),
+            'check_name' => $transfer->getCheckName(),
+            'real_name' => $transfer->getRealName(),
             'transfer_reason' => $transfer->getTransferReason(),
-            'payee_account'   => $transfer->getPayeeAccount(),
-            'oid'             => $user->getOid(),
-        ]);
+            'payee_account' => $transfer->getPayeeAccount(),
+            'oid' => $user->getOid(),
+        ], $optional));
     }
 
     /**
      * @param RefundableOrder $order
+     * @param array $optional
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function refund(RefundableOrder $order)
+    public function refund(RefundableOrder $order, array $optional = [])
     {
-        return $this->request('post', 'refund', [
+        return $this->request('post', 'refund', array_merge([
             'app_refund_id' => $order->getAppRefundId(),
             'refund_amount' => $order->getRefundAmount(),
             'refund_reason' => $order->getRefundReason(),
-            'payment_id'    => $order->getPaymentId(),
-        ]);
+            'payment_id' => $order->getPaymentId(),
+        ], $optional));
     }
 }
