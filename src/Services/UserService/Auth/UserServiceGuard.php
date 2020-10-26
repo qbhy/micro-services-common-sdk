@@ -75,7 +75,7 @@ class UserServiceGuard implements Guard
         try {
             $token = $token ?? app(Parser::class)->setRequest($this->request)->parseToken();
 
-            if ($token && ($payload = $this->jwt->fromToken($token)->getPayload())) {
+            if ($token && ($payload = $this->jwt->parse($token)->getPayload())) {
                 return $this->user = $this->provider->retrieveById($payload);
             }
         } catch (JWTException $exception) {
