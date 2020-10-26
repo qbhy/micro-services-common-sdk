@@ -99,7 +99,7 @@ class ServiceProvider extends BaseServiceProvider
             $encoder = $this->app->make(Encoder::class);
             /** @var Config $config */
             $config = $this->app->make(Config::class);
-            return new JWTManager(new ClientEncrypt($config), $encoder);
+            return new JWTManager(config('simple-jwt'));
         });
 
         $this->app->singleton(Parser::class, function () {
