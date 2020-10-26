@@ -36,7 +36,7 @@ class Client
     {
         $this->config     = $config;
         $this->encrypt    = new ClientEncrypt($this->config);
-        $this->jwtManager = new JWTManager($this->encrypt, $encoder);
+        $this->jwtManager = new JWTManager(config('simple-jwt'));
     }
 
     /**
