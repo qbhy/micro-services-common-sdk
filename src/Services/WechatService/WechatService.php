@@ -18,7 +18,7 @@ class WechatService extends Service
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -26,16 +26,16 @@ class WechatService extends Service
     public function sendTemplateMsg(UserServiceSubject $user, $templateId, $formId, $page, array $data)
     {
         return $this->request('post', 'mini-app-template-msg', [
-            'oid'         => $user->getOid(),
+            'oid' => $user->getOid(),
             'template_id' => $templateId,
-            'form_id'     => $formId,
-            'page'        => $page,
-            'data'        => $data,
+            'form_id' => $formId,
+            'page' => $page,
+            'data' => $data,
         ]);
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -43,10 +43,10 @@ class WechatService extends Service
     public function sendSubscribeMsg(UserServiceSubject $user, $templateId, $page, array $data)
     {
         return $this->request('post', 'mini-app-subscribe-msg', [
-            'oid'         => $user->getOid(),
+            'oid' => $user->getOid(),
             'template_id' => $templateId,
-            'page'        => $page,
-            'data'        => $data,
+            'page' => $page,
+            'data' => $data,
         ]);
     }
 
@@ -88,4 +88,8 @@ class WechatService extends Service
         return $this->request('POST', 'mini-app-decrypt-data', compact('code', 'encryptedData', 'iv'));
     }
 
+    public function officialUserFromCode($code, $cname = 'official')
+    {
+        return $this->request('GET', 'official-account/userinfo-code', compact('code', 'cname'));
+    }
 }
