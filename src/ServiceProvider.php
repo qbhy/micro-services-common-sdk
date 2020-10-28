@@ -22,6 +22,7 @@ use Qbhy\MicroServicesCommonSdk\Services\UserService\Auth\UserServiceUserProvide
 use Qbhy\MicroServicesCommonSdk\Services\UserService\UserService;
 use Qbhy\MicroServicesCommonSdk\Services\WechatService\WechatService;
 use Qbhy\SimpleJwt\Encoders\Base64UrlSafeEncoder;
+use Qbhy\SimpleJwt\EncryptAdapters\PasswordHashEncrypter;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
 use Qbhy\SimpleJwt\JWTManager;
 
@@ -48,7 +49,8 @@ class ServiceProvider extends BaseServiceProvider
         if (null === $this->config) {
             $config = new Config(config('micro-services'));
 
-            $use = $this->app->make(Request::class)->header($config->get('app_header', 'App'), $config->get('use', 'default'));
+            $use = $this->app->make(Request::class)->header($config->get('app_header', 'App'),
+                $config->get('use', 'default'));
 
             $this->config = $config->use($use);
         }
@@ -61,7 +63,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function setupConfig()
     {
-        $source = realpath(__DIR__ . '/../config/micro-services.php');
+        $source = realpath(__DIR__.'/../config/micro-services.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([$source => base_path('config/micro-services.php')], 'micro-services');
@@ -99,7 +101,8 @@ class ServiceProvider extends BaseServiceProvider
             $encoder = $this->app->make(Encoder::class);
             /** @var Config $config */
             $config = $this->app->make(Config::class);
-            return new JWTManager(config('simple-jwt'));
+
+            return new JWTManager($config->getAppConfig());
         });
 
         $this->app->singleton(Parser::class, function () {
