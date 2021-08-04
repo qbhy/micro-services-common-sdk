@@ -53,6 +53,12 @@ class Config extends Collection
             return $apps[$name];
         }
 
+        foreach ($apps as $key => $app) {
+            if ($app['id'] == $name) {
+                return $app;
+            }
+        }
+
         throw new UndefinedAppException('未定义的应用: ' . $name);
     }
 
