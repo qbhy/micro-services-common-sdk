@@ -10,6 +10,7 @@ namespace Qbhy\MicroServicesCommonSdk;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Laravel\Lumen\Application;
+use Qbhy\MicroServicesCommonSdk\Exceptions\UndefinedAppException;
 use Qbhy\MicroServicesCommonSdk\JwtParser\AuthHeaders;
 use Qbhy\MicroServicesCommonSdk\JwtParser\InputSource;
 use Qbhy\MicroServicesCommonSdk\JwtParser\LumenRouteParams;
@@ -49,8 +50,9 @@ class ServiceProvider extends BaseServiceProvider
         if (null === $this->config) {
             $config = new Config(config('micro-services'));
 
-            $use = $this->app->make(Request::class)->header($config->get('app_header', 'App'),
-                $config->get('use', 'default'));
+            $request = $this->app->make(Request::class);
+            $use = $request->header($config->get('app_header', 'App'),
+                $request->header('aid', $config->get('use', 'default')));
 
             $this->config = $config->use($use);
         }
@@ -63,7 +65,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function setupConfig()
     {
-        $source = realpath(__DIR__.'/../config/micro-services.php');
+        $source = realpath(__DIR__ . '/../config/micro-services.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([$source => base_path('config/micro-services.php')], 'micro-services');

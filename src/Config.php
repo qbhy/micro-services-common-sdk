@@ -27,6 +27,13 @@ class Config extends Collection
             return $this;
         }
 
+        foreach ($apps as $key => $app) {
+            if ($app['id'] == $name) {
+                $this->offsetSet('use', $name);
+                return $this;
+            }
+        }
+
         throw new UndefinedAppException('未定义的应用: ' . $name);
     }
 
