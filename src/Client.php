@@ -34,9 +34,9 @@ class Client
 
     public function __construct(Config $config, Encoder $encoder)
     {
-        $this->config     = $config;
-        $this->encrypt    = new ClientEncrypt($this->config);
-        $this->jwtManager = new JWTManager(config('simple-jwt'));
+        $this->config = $config;
+        $this->encrypt = new ClientEncrypt($this->config);
+        $this->jwtManager = new JWTManager($config->getAppConfig());
     }
 
     /**
@@ -56,7 +56,7 @@ class Client
     /**
      * @param string $method
      * @param string $uri
-     * @param array  $params
+     * @param array $params
      *
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -67,16 +67,15 @@ class Client
         try {
             $response = $this->getHttp()->request($method, $uri, [
                 Client::paramsType($method, $paramsType) => $params,
-                RequestOptions::HEADERS                  => [
+                RequestOptions::HEADERS => [
                     Client::AUTH_HEADER => $this->token(),
                 ]
             ]);
+            return $this->formatResponse($response);
         } catch (BadResponseException $exception) {
             throw $exception;
 //            $response = $exception->getResponse();
         }
-
-        return $this->formatResponse($response);
     }
 
     public static function paramsType(string $method, $paramsType)
@@ -90,11 +89,11 @@ class Client
     }
 
     /**
-     * @param Response $response
+     * @param $response
      *
      * @return array|string
      */
-    public function formatResponse(Response $response)
+    public function formatResponse($response)
     {
         if ($result = @json_decode($raw = $response->getBody()->__toString(), true)) {
             return $result;
