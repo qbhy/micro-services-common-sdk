@@ -95,11 +95,8 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         $this->app->singleton(JWTManager::class, function () {
-            /** @var Base64UrlSafeEncoder $encoder */
-            $encoder = $this->app->make(Encoder::class);
             /** @var Config $config */
-            $config = $this->app->make(Config::class);
-
+            $config = $this->getConfig();
             return new JWTManager($config->getAppConfig());
         });
 
