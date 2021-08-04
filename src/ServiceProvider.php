@@ -47,15 +47,11 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function getConfig()
     {
-        if (null === $this->config) {
-            $config = new Config(config('micro-services'));
-
-            $request = $this->app->make(Request::class);
-            $use = $request->header($config->get('app_header', 'App'),
-                $request->header('aid', $config->get('use', 'default')));
-
-            $this->config = $config->use($use);
-        }
+        $config = new Config(config('micro-services'));
+        $request = $this->app->make(Request::class);
+        $use = $request->header($config->get('app_header', 'App'),
+            $request->header('aid', $config->get('use', 'default')));
+        $this->config = $config->use($use);
 
         return $this->config;
     }
