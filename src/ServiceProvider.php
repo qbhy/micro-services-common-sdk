@@ -118,7 +118,7 @@ class ServiceProvider extends BaseServiceProvider
     protected function registerServices()
     {
         $this->app->singleton(Client::class, function () {
-            return new Client($this->app->make(Config::class), $this->app->make(Encoder::class));
+            return new Client($this->app->make(Config::class));
         });
 
         $services = [

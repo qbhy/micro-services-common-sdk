@@ -10,7 +10,6 @@ namespace Qbhy\MicroServicesCommonSdk;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Qbhy\MicroServicesCommonSdk\Exceptions\UndefinedAppException;
 use Qbhy\SimpleJwt\Interfaces\Encoder;
@@ -26,17 +25,15 @@ class Client
     /** @var ClientEncrypt */
     protected $encrypt;
 
-    /** @var JWTManager */
-    protected $jwtManager;
-
     /** @var HttpClient */
     protected $http;
 
-    public function __construct(Config $config, Encoder $encoder)
+    protected $jwtManagers = [];
+
+    public function __construct(Config $config)
     {
         $this->config = $config;
         $this->encrypt = new ClientEncrypt($this->config);
-        $this->jwtManager = new JWTManager($config->getAppConfig());
     }
 
     /**
@@ -54,9 +51,9 @@ class Client
     }
 
     /**
-     * @param string $method
-     * @param string $uri
-     * @param array $params
+     * @param  string  $method
+     * @param  string  $uri
+     * @param  array   $params
      *
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -108,7 +105,19 @@ class Client
      */
     public function token()
     {
-        return $this->jwtManager->make(['aid' => $this->config->getAppConfig()['id']])->token();
+        return $this->getJwt()->make(['aid' => $this->config->getAppConfig()['id']])->token();
+    }
+
+    /**
+     * @return JWTManager
+     */
+    public function getJwt()
+    {
+        $id = $this->config->getAppConfig()['id'];
+        if (isset($this->jwtManagers[$id])) {
+            return $this->jwtManagers[$id];
+        }
+        return $this->jwtManagers[$id] ?: $this->jwtManagers[$id] = new JWTManager($this->getConfig()->getAppConfig());
     }
 
     /**
