@@ -105,19 +105,19 @@ class Client
      */
     public function token()
     {
-        return $this->getJwt()->make(['aid' => $this->config->getAppConfig()['id']])->token();
+        $aid = $this->config->getAppConfig()['id'];
+        return $this->getJwt($aid)->make(['aid' => $aid])->token();
     }
 
     /**
      * @return JWTManager
      */
-    public function getJwt()
+    public function getJwt($aid)
     {
-        $id = $this->config->getAppConfig()['id'];
-        if (isset($this->jwtManagers[$id])) {
-            return $this->jwtManagers[$id];
+        if (isset($this->jwtManagers[$aid])) {
+            return $this->jwtManagers[$aid];
         }
-        return $this->jwtManagers[$id] ?: $this->jwtManagers[$id] = new JWTManager($this->getConfig()->getAppConfig());
+        return $this->jwtManagers[$aid] ?? $this->jwtManagers[$aid] = new JWTManager($this->getConfig()->getAppConfig());
     }
 
     /**
